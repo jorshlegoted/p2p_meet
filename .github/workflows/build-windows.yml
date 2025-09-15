@@ -29,10 +29,11 @@ jobs:
 
     - name: Zip the .exe
       run: |
-        Compress-Archive -Path dist\meeting.exe -DestinationPath releases\Meeting-Windows.zip
+        powershell Compress-Archive -Path dist\meeting.exe -DestinationPath Meeting-Windows.zip
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: WindowsApp
-        path: releases\Meeting-Windows.zip
+        path: Meeting-Windows.zip
+
