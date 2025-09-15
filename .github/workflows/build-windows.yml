@@ -1,0 +1,39 @@
+name: Build Windows App
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller aiortc mss sounddevice pillow websockets
+
+    - name: Build .exe
+      run: |
+        pyinstaller --onefile --windowed main/meeting.py
+
+    - name: Zip the .exe
+      run: |
+        powershell Compress-Archive -Path dist\meeting.exe -DestinationPath Meeting-Windows.zip
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: WindowsApp
+        path: Meeting-Windows.zip
+

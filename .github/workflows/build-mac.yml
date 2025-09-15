@@ -1,0 +1,35 @@
+name: Build Mac App
+
+on:
+  push:
+    branches: [main]  # когда пушишь в main
+  workflow_dispatch:   # чтобы запускать вручную
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install py2app aiortc mss sounddevice pillow websockets
+
+    - name: Build Mac App
+      run: |
+        echo "from setuptools import setup; setup(app=['main/meeting.py'], options={'py2app': {'argv_emulation': True}}, setup_requires=['py2app'])" > setup.py
+        python setup.py py2app
+
+    - name: Upload .app artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: MeetingApp
+        path: dist/*.app
