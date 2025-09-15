@@ -25,7 +25,7 @@ jobs:
 
     - name: Build Mac App
       run: |
-        echo "from setuptools import setup; setup(app=['meeting.py'], options={'py2app': {'argv_emulation': True}}, setup_requires=['py2app'])" > setup.py
+        echo "from setuptools import setup; setup(app=['main/meeting.py'], options={'py2app': {'argv_emulation': True}}, setup_requires=['py2app'])" > setup.py
         python setup.py py2app
 
     - name: Upload .app artifact
